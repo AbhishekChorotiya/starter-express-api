@@ -45,7 +45,7 @@ app.use(
 );
 
 // CONNECTING SERVER TO MONGODB DATABASE --------------------------------------------------------
-mongoose.connect("mongodb://127.0.0.1:27017/LMS");
+mongoose.connect(process.env.MONGO_URL);
 // mongoose.connect(process.env.MONGO_URL);
 var db = mongoose.connection;
 //checking
