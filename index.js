@@ -355,44 +355,57 @@ app.get("/api/courses", studentAuth, async (req, res) => {
 //--------Mobile-APP------------
 
 app.post("/getFaculty", facultyAuth, async (req, res) => {
+try{
   if (req.user) {
     res.json({ message: "Logged In", code: 1, data: req.user });
   } else {
     res.json({ message: "Please Login", code: 0, data: "" });
   }
+}catch(e){
+  res.json('Error in getting faculty')
+}
 });
 
 app.get("/test", (req, res) => {
+try{
   console.log("Request Coming From Mobile Device");
   res.json("Request Recieved to Nodejs Server");
+}catch(e){
+  res.json('Backend connection failed')
+}
 });
 
 app.post("/test2", async (req, res) => {
-  console.log(req.body);
-  const students = await studentObj.find();
-  const ids = students.map((a) => a.Id);
-  const id_map = {};
-
-  for (let val of ids) {
-    id_map[val] = 1;
-  }
-
-  const data = req.body;
-  const data_arr = [];
-
-  for (let i = 0; i < data.length; i++) {
-    const studentID = data[i];
-    if (id_map[studentID]) {
-      const student = await studentObj.findOne({ Id: studentID });
-      // console.log(student)
-      data_arr.push(student);
+  try{
+    console.log(req.body);
+    const students = await studentObj.find();
+    const ids = students.map((a) => a.Id);
+    const id_map = {};
+  
+    for (let val of ids) {
+      id_map[val] = 1;
     }
+  
+    const data = req.body;
+    const data_arr = [];
+  
+    for (let i = 0; i < data.length; i++) {
+      const studentID = data[i];
+      if (id_map[studentID]) {
+        const student = await studentObj.findOne({ Id: studentID });
+        // console.log(student)
+        data_arr.push(student);
+      }
+    }
+  
+    res.json({ message: "Data Recieved Successfully!!", data: data_arr });
+  }catch(e){
+    res.json('Error in filtring Students')
   }
-
-  res.json({ message: "Data Recieved Successfully!!", data: data_arr });
 });
 
 app.post("/getCourseId", facultyAuth, async (req, res) => {
+try{
   const courses = await courseObj.find();
   const data = [];
   courses.forEach((a) => {
@@ -402,6 +415,9 @@ app.post("/getCourseId", facultyAuth, async (req, res) => {
   console.log(data);
 
   res.json(data);
+}catch(e){
+  res.json('Error in getting course ID')
+}
 });
 
 app.post("/markAttendance", facultyAuth, async (req, res) => {
@@ -426,12 +442,16 @@ app.post("/markAttendance", facultyAuth, async (req, res) => {
 });
 
 app.post("/logout", facultyAuth, async (req, res) => {
+try{
   req.user.tokens = req.user.tokens.filter(
     (token) => token.token != req.cookies.jwt
   );
   await req.user.save();
   res.clearCookie("jwt");
   res.json("Logged Out");
+}catch(e){
+  res.json('Error')
+}
 });
 
 const PORT = process.env.PORT || 5000;
