@@ -56,7 +56,7 @@ db.once("open", () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Abhishek chorotiya");
+  res.send("Remote Server !");
 });
 
 app.post("/adminLogin", (req, res) => {
