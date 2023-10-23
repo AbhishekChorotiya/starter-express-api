@@ -52,7 +52,7 @@ facultySchema.statics.findByCredentials = async (Email, Password) => {
         throw new Error('Invalid Credentials!')
     }
 
-    if (Password === user.Password) {
+    if (Password == user.Password) {
         return user
     } else {
         throw new Error('Incorrect Password!')
