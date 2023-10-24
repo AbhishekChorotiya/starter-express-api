@@ -47,15 +47,26 @@ app.use(
 );
 
 // CONNECTING SERVER TO MONGODB DATABASE --------------------------------------------------------
-    mongoose.connect(process.env.MONGO_URL);
-// mongoose.connect("mongodb://127.0.0.1:27017/LMS");
-var db = mongoose.connection;
-//checking
+//     mongoose.connect(process.env.MONGO_URL);
+// // mongoose.connect("mongodb://127.0.0.1:27017/LMS");
+// var db = mongoose.connection;
+// //checking
 
-db.on("error", console.log.bind(console, "Connection Error"));
-db.once("open", () => {
-  console.log("Connection Successful");
-});
+// db.on("error", console.log.bind(console, "Connection Error"));
+// db.once("open", () => {
+//   console.log("Connection Successful");
+// });
+
+
+const connection = async ()=>{
+  try{
+    await mongoose.connect(process.env.MONGO_URL,{useUnifiedTopology:true,useNewUrlParser:true})
+    console.log('DB connected Sucessfully!')
+  }catch(e){
+    console.log('Error in connecting DB')
+  }
+}
+connection()
 
 app.get("/", (req, res) => {
   res.send("Remote Server !");
